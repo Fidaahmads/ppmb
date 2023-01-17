@@ -19,11 +19,11 @@
                             @csrf
 
                             <div class="form-group">
-                                <label class="font-weight-bold">GAMBAR</label>
-                                <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                                <label class="font-weight-bold">Number</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="number" value="{{ old('number') }}" placeholder="Put Your Number">
                             
                                 <!-- error message untuk title -->
-                                @error('image')
+                                @error('number')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
@@ -31,11 +31,11 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="font-weight-bold">JUDUL</label>
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" placeholder="Masukkan Judul Post">
+                                <label class="font-weight-bold">Name</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Put Your Name">
                             
                                 <!-- error message untuk title -->
-                                @error('title')
+                                @error('name')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
@@ -43,16 +43,41 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="font-weight-bold">KONTEN</label>
-                                <textarea class="form-control @error('content') is-invalid @enderror" name="content" rows="5" placeholder="Masukkan Konten Post">{{ old('content') }}</textarea>
+                                <label class="font-weight-bold"><Em>Email</Em></label>
+                                <input type="text" class="form-control @error('content') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Masukkan Email Anda">
                             
                                 <!-- error message untuk content -->
-                                @error('content')
+                                @error('email')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Phone</label>
+                                <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" placeholder="Put Your Phone Number">
+                            
+                                <!-- error message untuk title -->
+                                @error('phone')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Photo</label>
+                                <input type="file" class="form-control @error('photo') is-invalid @enderror" name="photo">
+                            
+                                <!-- error message untuk title -->
+                                @error('photo')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
 
                             <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
                             <button type="reset" class="btn btn-md btn-warning">RESET</button>

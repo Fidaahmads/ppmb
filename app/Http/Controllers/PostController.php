@@ -41,21 +41,25 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //validate form
-        $this->validate($request, [
-            'image'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'title'     => 'required|min:5',
-            'content'   => 'required|min:10'
+        $request->validate( [
+            'number'     => 'required|min:5',
+            'name'   => 'required|min:10',
+            'email'   => 'required|min:10',
+            'phone'   => 'required|min:10',
+            'photo'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         //upload image
-        $image = $request->file('image');
+        $image = $request->file('photo');
         $image->storeAs('public/posts', $image->hashName());
 
         //create post
         Post::create([
-            'image'     => $image->hashName(),
-            'title'     => $request->title,
-            'content'   => $request->content
+            'number'     => $request->number,
+            'name'     => $request->name,
+            'email'   => $request->email,
+            'phone'     => $request->phone,
+            'photo'     => $image->hashName()
         ]);
 
         //redirect to index
@@ -84,16 +88,18 @@ class PostController extends Controller
     {
         //validate form
         $this->validate($request, [
-            'image'     => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'title'     => 'required|min:5',
-            'content'   => 'required|min:10'
+            'number'   => 'required|min:10',
+            'name'     => 'required|min:5',
+            'email'   => 'required|min:10',
+            'phone'   => 'required|min:10',
+            'photo'     => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         //check if image is uploaded
         if ($request->hasFile('image')) {
 
             //upload new image
-            $image = $request->file('image');
+            $image = $request->file('photo');
             $image->storeAs('public/posts', $image->hashName());
 
             //delete old image
@@ -101,17 +107,21 @@ class PostController extends Controller
 
             //update post with new image
             $post->update([
-                'image'     => $image->hashName(),
-                'title'     => $request->title,
-                'content'   => $request->content
+                'number'     => $request->number,
+                'name'     => $request->name,
+                'email'   => $request->email,
+                'phone'     => $request->phone,
+                'image'     => $image->hashName()
             ]);
 
         } else {
 
             //update post without image
             $post->update([
-                'title'     => $request->title,
-                'content'   => $request->content
+                'number'     => $request->number,
+                'name'     => $request->name,
+                'email'   => $request->email,
+                'phone'     => $request->phone
             ]);
         }
 

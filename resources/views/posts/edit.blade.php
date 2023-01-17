@@ -19,16 +19,11 @@
                             @method('PUT')
 
                             <div class="form-group">
-                                <label class="font-weight-bold">GAMBAR</label>
-                                <input type="file" class="form-control" name="image">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="font-weight-bold">JUDUL</label>
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $post->title) }}" placeholder="Masukkan Judul Post">
+                                <label class="font-weight-bold">Number</label>
+                                <input type="text" class="form-control @error('number') is-invalid @enderror" name="number" value="{{ old('number', $post->number) }}" placeholder="Put Your Number">
                             
                                 <!-- error message untuk title -->
-                                @error('title')
+                                @error('number')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
@@ -36,15 +31,44 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="font-weight-bold">KONTEN</label>
-                                <textarea class="form-control @error('content') is-invalid @enderror" name="content" rows="5" placeholder="Masukkan Konten Post">{{ old('content', $post->content) }}</textarea>
+                                <label class="font-weight-bold">Name</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $post->name) }}" placeholder="Put Your Name">
                             
-                                <!-- error message untuk content -->
-                                @error('content')
+                                <!-- error message untuk title -->
+                                @error('name')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
                                 @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Email</label>
+                                <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $post->email) }}" placeholder="Put Your Email">
+                            
+                                <!-- error message untuk title -->
+                                @error('email')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Phone</label>
+                                <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', $post->phone) }}" placeholder="Put Your Phone Number">
+                            
+                                <!-- error message untuk content -->
+                                @error('phone')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">Photo</label>
+                                <input type="file" class="form-control" name="photo">
                             </div>
 
                             <button type="submit" class="btn btn-md btn-primary">UPDATE</button>
