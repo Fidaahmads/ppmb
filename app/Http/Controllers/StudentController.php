@@ -15,8 +15,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //get posts
-        $posts = Student::latest()->paginate(5);
+        //get students
+        $students = Student::latest()->paginate(5);
 
         //render view with students
         return view('students.index', compact('students'));
@@ -42,24 +42,24 @@ class StudentController extends Controller
     {
         //validate form
         $request->validate( [
-            'number'     => 'required|min:5',
-            'name'   => 'required|min:10',
+            'number'  => 'required|min:5',
+            'name'    => 'required|min:10',
             'email'   => 'required|min:10',
             'phone'   => 'required|min:10',
-            'photo'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'photo'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        //upload image
-        $image = $request->file('photo');
-        $image->storeAs('public/students', $image->hashName());
+        //upload photo
+        $photo = $request->file('photo');
+        $photo->storeAs('public/students', $photo->hashName());
 
-        //create post
+        //create student
         Student ::create([
-            'number'     => $request->number,
-            'name'     => $request->name,
+            'number'  => $request->number,
+            'name'    => $request->name,
             'email'   => $request->email,
-            'phone'     => $request->phone,
-            'photo'     => $image->hashName()
+            'phone'   => $request->phone,
+            'photo'   => $photo->hashName()
         ]);
 
         //redirect to index
@@ -69,22 +69,22 @@ class StudentController extends Controller
     /**
      * edit
      *
-     * @param  mixed $post
+     * @param  mixed $student
      * @return void
      */
-    public function edit(Student $post)
+    public function edit(Student $student)
     {
-        return view('students.edit', compact('students'));
+        return view('students.edit', compact('student'));
     }
     
     /**
      * update
      *
      * @param  mixed $request
-     * @param  mixed $post
+     * @param  mixed $student
      * @return void
      */
-    public function update(Request $request, Student $post)
+    public function update(Request $request, Student $student)
     {
         //validate form
         $request->validate( [
@@ -92,32 +92,32 @@ class StudentController extends Controller
             'name'    => 'required|min:5',
             'email'   => 'required|min:10',
             'phone'   => 'required|min:10',
-            'photo'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'photo'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        //check if image is uploaded
+        //check if photo$photo is uploaded
         if ($request->hasFile('photo')) {
 
-            //upload new image
-            $image = $request->file('photo');
-            $image->storeAs('public/students', $image->hashName());
+            //upload new photo$photo
+            $photo = $request->file('photo');
+            $photo->storeAs('public/students', $photo->hashName());
 
-            //delete old image
-            Storage::delete('public/students/'.$post->image);
+            //delete old photo$photo
+            Storage::delete('public/students/'.$student->photo);
 
-            //update post with new image
-            $post->update([
+            //update student with new photo$photo
+            $student->update([
                 'number'  => $request->number,
                 'name'    => $request->name,
                 'email'   => $request->email,
                 'phone'   => $request->phone,
-                'photo'   => $image->hashName()
+                'photo'   => $photo->hashName()
             ]);
 
         } else {
 
-            //update post without image
-            $post->update([
+            //update student without photo
+            $student->update([
                 'number'     => $request->number,
                 'name'     => $request->name,
                 'email'   => $request->email,
@@ -132,16 +132,16 @@ class StudentController extends Controller
     /**
      * destroy
      *
-     * @param  mixed $post
+     * @param  mixed $student
      * @return void
      */
-    public function destroy(Student $post)
+    public function destroy(Student $student)
     {
-        //delete image
-        Storage::delete('public/students/'. $post->image);
+        //delete photo$photo
+        Storage::delete('public/students/'. $student->photo);
 
-        //delete post
-        $post->delete();
+        //delete student
+        $student->delete();
 
         //redirect to index
         return redirect()->route('students.index')->with(['success' => 'Data Berhasil Dihapus!']);

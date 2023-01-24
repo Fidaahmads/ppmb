@@ -14,12 +14,13 @@
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
-                        <form action="{{ route('students.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
+                            <div class="form-group">
                             <label class="font-weight-bold">Number</label>
-                                <input type="text" class="form-control @error('number') is-invalid @enderror" name="number" value="{{ old('number', $post->number) }}" placeholder="Put Your Number">
+                                <input type="text" class="form-control @error('number') is-invalid @enderror" name="number" value="{{ old('number', $student->number) }}" placeholder="Put Your Number">
 
                                 <!-- error message untuk title -->
                                 @error('number')
@@ -31,7 +32,7 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">Name</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $post->name) }}" placeholder="Put Your Name">
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $student->name) }}" placeholder="Put Your Name">
 
                                 <!-- error message untuk title -->
                                 @error('name')
@@ -43,7 +44,7 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">Email</label>
-                                <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $post->email) }}" placeholder="Put Your Email">
+                                <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->email) }}" placeholder="Put Your Email">
 
                                 <!-- error message untuk title -->
                                 @error('email')
@@ -55,7 +56,7 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">Phone</label>
-                                <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', $post->phone) }}" placeholder="Put Your Phone Number">
+                                <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', $student->phone) }}" placeholder="Put Your Phone Number">
 
                                 <!-- error message untuk title -->
                                 @error('phone')

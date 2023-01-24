@@ -10,9 +10,9 @@ class Controller extends BaseController
     public function index()
     {
     	// mengambil data dari table syllabus
-    	$mitq = DB::table('mitq')->get();
+    	$ppmb = DB::table('ppmb')->get();
  
     	// mengirim data syllabus ke view index
-    	return view('welcome', ['mitq' => $mitq]);
+    	return view('welcome', ['ppmb' => $ppmb]);
 }
 }

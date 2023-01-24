@@ -89,7 +89,7 @@
   <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="#">Sign out</a>
+      <a class="nav-link px-3" href="#">Login</a>
     </div>
   </div>
 </header>
@@ -106,13 +106,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('posts.index') }}">
+            <a class="nav-link" href="{{ route('posts.index') }}">
               <i class="fa-solid fa-book"></i>
               Posts
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('students.index') }}">              
+            <a class="nav-link" href="{{ route('students.index') }}">              
               <i class="fa-solid fa-user"></i>
               Students
             </a>
