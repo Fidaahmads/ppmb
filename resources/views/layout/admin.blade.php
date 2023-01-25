@@ -118,9 +118,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">              
+            <a class="nav-link" href="groups.index">              
               <i class="fa-solid fa-user"></i>
-              Presences
+              Groups
             </a>
           </li>
           <li class="nav-item">
