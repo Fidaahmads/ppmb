@@ -50,7 +50,7 @@ class ScheduleController extends Controller
         ]);
 
 
-        //create student
+        //create schedule
         Schedule ::create([
             'group_id'  => $request->group_id,
             'user_id'    => $request->user_id,
@@ -66,22 +66,22 @@ class ScheduleController extends Controller
     /**
      * edit
      *
-     * @param  mixed $student
+     * @param  mixed $schedule
      * @return void
      */
-    public function edit(Schedule $student)
+    public function edit(Schedule $schedule)
     {
-        return view('schedules.edit', compact('student'));
+        return view('schedules.edit', compact('schedule'));
     }
     
     /**
      * update
      *
      * @param  mixed $request
-     * @param  mixed $student
+     * @param  mixed $schedule
      * @return void
      */
-    public function update(Request $request, Schedule $student)
+    public function update(Request $request, Schedule $schedule)
     {
         //validate form
         $request->validate( [
@@ -92,8 +92,8 @@ class ScheduleController extends Controller
             'time_end_at'   => 'required|min:10',
         ]);
 
-            //update student with new photo$photo
-            $student->update([
+            //update schedule with new photo$photo
+            $schedule->update([
                 'group_id'  => $request->group_id,
                 'user_id'    => $request->user_id,
                 'note'   => $request->note,
@@ -110,13 +110,13 @@ class ScheduleController extends Controller
     /**
      * destroy
      *
-     * @param  mixed $student
+     * @param  mixed $schedule
      * @return void
      */
-    public function destroy(Schedule $student)
+    public function destroy(Schedule $schedule)
     {
-        //delete student
-        $student->delete();
+        //delete schedule
+        $schedule->delete();
 
         //redirect to index
         return redirect()->route('schedules.index')->with(['success' => 'Data Berhasil Dihapus!']);

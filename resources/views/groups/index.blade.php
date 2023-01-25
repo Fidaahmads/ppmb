@@ -1,32 +1,32 @@
-@extends('layout.admin')
+@extends('layouts.admin')
 @section('content')
-<h4>Student Data</h4>
+<h4>Group Data</h4>
 
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
-                        <a href="{{ route('students.create') }}" class="btn btn-md btn-success mb-3">ADD STUDENT</a>
+                        <a href="{{ route('groups.create') }}" class="btn btn-md btn-success mb-3">ADD GROUP</a>
                         <table class="table table-bordered">
                             <thead>
                               <tr>
-                                <th scope="col">Students</th> 
                                 <th scope="col">ID</th>
                                 <th scope="col">Dosen ID</th>
                                 <th scope="col">Dosen</th>
                                 <th scope="col">Kelas</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Students</th>
+                                <th scope="col">Action</th> 
                               </tr>
                             </thead>
                             <tbody>
                               @forelse ($groups as $group)
                                 <tr>
-                                    <td><a href="" class="btn btn-sm btn-success">LIST</a></td>
                                     <td>{{ $group->id }}</td>
                                     <td>{{ $group->user_id }}</td>
                                     <td>{{ $group->user_name; }}</td>
                                     <td>{{ $group->name }}</td>
+                                    <td><a href="{{ route('members.index') }}" class="btn btn-sm btn-success">LIST</a></td>
                                     <td class="text-center">
                                         <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('groups.destroy', $group->id) }}" method="POST">
                                             <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">EDIT</a>
@@ -43,7 +43,7 @@
                               @endforelse
                             </tbody>
                           </table>  
-                          {{ $groups->links() }}
+                    
                     </div>
                 </div>
             </div>
