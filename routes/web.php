@@ -33,6 +33,11 @@ Route::middleware(['auth', 'user-access'])->group(function () {
     Route::resource('/members', \App\Http\Controllers\MemberController::class);
     });
 
+Route::post('login', [ 'as' => 'login', 'uses' => 'LoginController@login']);
+Route::middleware(['auth', 'user-access'])->group(function () {
+    Route::resource('/schedules', \App\Http\Controllers\ScheduleController::class);
+    });
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
