@@ -1,62 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Edit Student Schedule</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body style="background: lightgray">
+@extends('layout.admin')
 
-    <div class="container mt-5 mb-5">
+@section('content')
+    <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <div class="card border-0 shadow rounded">
+
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">Edit Schedule #{{ $schedule->id }}</div>
                     <div class="card-body">
-                        <form action="{{ route('schedules.update', $schedule->id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
+                        <a href="{{ url('/schedules') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <br />
+                        <br />
 
-                            <div class="form-group">
-                            <label class="font-weight-bold">Mulai Kelas</label>
-                                <input type="text" class="form-control @error('time_start_at') is-invalid @enderror" name="time_start_at" value="{{ old('time_start_at', $schedule->time_start_at) }}" placeholder="Put Your Number">
+                        @if ($errors->any())
+                            <ul class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
 
-                                <!-- error message untuk title -->
-                                @error('time_start_at')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                        <form method="POST" action="{{ url('/schedules/' . $schedule->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                            {{ method_field('PATCH') }}
+                            {{ csrf_field() }}
 
-                            <div class="form-group">
-                                <label class="font-weight-bold">Akhir Kelas</label>
-                                <input type="text" class="form-control @error('time_end_at') is-invalid @enderror" name="time_end_at" value="{{ old('time_end_at', $schedule->time_end_at) }}" placeholder="Put Your Name">
+                            @include ('schedules.form', ['formMode' => 'edit'])
 
-                                <!-- error message untuk title -->
-                                @error('time_end_at')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                        </form>
 
-                            <button type="submit" class="btn btn-md btn-primary">UPDATE</button>
-                            <button type="reset" class="btn btn-md btn-warning">RESET</button>
-
-                        </form> 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace( 'content' );
-</script>
-</body>
-</html>
+@endsection

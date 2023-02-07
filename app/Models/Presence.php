@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Schedule extends Model
+class Presence extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'schedules';
+    protected $table = 'presences';
 
     /**
     * The database primary key value.
@@ -25,15 +25,15 @@ class Schedule extends Model
      *
      * @var array
      */
-    protected $fillable = ['group_id', 'user_id', 'note', 'time_start_at', 'time_end_at'];
+    protected $fillable = ['schedule_id', 'student_id', 'note', 'start_at', 'end_at'];
 
-    public function group()
+    public function schedule()
     {
-        return $this->belongsTo('App\Models\Group');
+        return $this->belongsTo('App\Models\Schedule');
     }
-    public function user()
+    public function student()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\Student');
     }
     
 }
