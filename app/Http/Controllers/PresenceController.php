@@ -7,8 +7,9 @@ use App\Http\Requests;
 
 use App\Models\Presence;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController; 
 
-class PresencesController extends Controller
+class PresenceController extends BaseController
 {
     /**
      * Display a listing of the resource.

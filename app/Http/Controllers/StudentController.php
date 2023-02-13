@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controller as BaseController; 
 
-class StudentController extends Controller
+class StudentController extends BaseController
 {   
     /**
      * index

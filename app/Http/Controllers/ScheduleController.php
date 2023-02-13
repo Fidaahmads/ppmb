@@ -9,8 +9,9 @@ use App\Models\Schedule;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Controller as BaseController; 
 
-class ScheduleController extends Controller
+class ScheduleController extends BaseController
 {
     /**
      * Display a listing of the resource.

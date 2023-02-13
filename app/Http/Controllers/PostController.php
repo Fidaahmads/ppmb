@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controller as BaseController; 
 
-class PostController extends Controller
+class PostController extends BaseController
 {    
     /**
      * index
