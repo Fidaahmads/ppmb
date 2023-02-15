@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('group_id');
             $table->foreign('group_id')->references('id')->on('groups');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedbigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('note');
             $table->string('time_start_at');

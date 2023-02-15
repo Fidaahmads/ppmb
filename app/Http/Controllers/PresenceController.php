@@ -2,124 +2,137 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
-
-use App\Models\Presence;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController; 
+use App\Models\Presence;
+use App\Models\Student;
+use App\Models\Schedule;
+use Illuminate\Support\Facades\DB;
 
-class PresenceController extends BaseController
+
+class PresenceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * index
      *
-     * @return \Illuminate\View\View
+     * @return void
      */
-    public function index(Request $request)
+    public function index()
     {
-        $keyword = $request->get('search');
-        $perPage = 25;
+        //get presences
+        $presences = Presence::latest()->paginate(5);
 
-        if (!empty($keyword)) {
-            $presences = Presence::where('schedule_id', 'LIKE', "%$keyword%")
-                ->orWhere('student_id', 'LIKE', "%$keyword%")
-                ->orWhere('note', 'LIKE', "%$keyword%")
-                ->orWhere('start_at', 'LIKE', "%$keyword%")
-                ->orWhere('end_at', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $presences = Presence::latest()->paginate($perPage);
-        }
-
+        //render view with presences
         return view('presences.index', compact('presences'));
     }
 
+    public function show($id)
+    {
+        $schedule = Schedule::find($id);
+        // $scheduleId = $schedule->id;
+        $result = DB::table('schedules')
+            ->join('groups', 'schedules.group_id', '=', 'groups.id')
+            ->join('users', 'schedules.user_id', '=', 'users.id')
+            ->select('schedules.*', 'groups.name as group_name', 'users.name as user_name')
+            ->where('schedules.id', $id)
+            ->first();
+        
+        $group_id = $result->group_id;    
+        $count = DB::table('members')->where('group_id', $group_id)->count();
+
+        $presence = DB::table('members') ->select('members.*') ->where('group_id', $group_id) ->get();
+
+        return view('presences.action', compact('schedule', 'result', 'count', 'presence'));
+    }
+
     /**
-     * Show the form for creating a new resource.
+     * create
      *
-     * @return \Illuminate\View\View
+     * @return void
      */
     public function create()
     {
-        return view('presences.create');
+        $presence = Presence::All();
+        $schedule = Schedule::All();
+        $student = Student::All();
+        return view('presences.create', compact('presence', 'schedule', 'student'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function store(Request $request)
     {
-        
-        $requestData = $request->all();
-        
-        Presence::create($requestData);
 
-        return redirect('presences')->with('flash_message', 'Presence added!');
+
+        //validate form
+        $request->validate([
+            'schedule_id'     => 'required',
+            'student_id'     => 'required',
+            'presence'     => 'required',
+            'note'     => 'required'
+        ]);
+
+        //create post
+        Presence::create([
+            'schedule_id'   => $request->schedule_id,
+            'student_id'   => $request->student_id,
+            'presence'      => $request->presence,
+            'note'  => $request->note,
+        ]);
+
+        //redirect to index
+        return redirect()->route('presences.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $presence = Presence::findOrFail($id);
-
-        return view('presences.show', compact('presence'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
+     * edit
+     * 
+     * @param  mixed $presence
+     * @return void
      */
     public function edit($id)
     {
-        $presence = Presence::findOrFail($id);
+        $presence = Presence::find($id);
+        $schedule = Schedule::All();
+        $student = Student::All();
 
-        return view('presences.edit', compact('presence'));
+        $selectedScheduleId = DB::table('presences')->select('schedule_id')->where('id', $id)->value('schedule_id');
+        $selectedStudentId = DB::table('presences')->select('student_id')->where('id', $id)->value('student_id');
+        return view('presences.edit', compact('presence', 'schedule', 'student', 'selectedScheduleId', 'selectedStudentId'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * update
      *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param  mixed $request
+     * @param  mixed $presence
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Presence $presence)
     {
-        
-        $requestData = $request->all();
-        
-        $presence = Presence::findOrFail($id);
-        $presence->update($requestData);
+        //validate form
+        $request->validate([
+            'schedule_id'     => 'required',
+            'student_id'     => 'required',
+            'presence'     => 'required',
+            'note'     => 'required',
+        ]);
 
-        return redirect('presences')->with('flash_message', 'Presence updated!');
+        //update Group
+        $presence->update([
+            'schedule_id'   => $request->schedule_id,
+            'student_id'   => $request->student_id,
+            'presence'      => $request->presence,
+            'note'  => $request->note
+        ]);
+
+
+        //redirect to index
+        return redirect()->route('presences.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
+    public function destroy(Presence $presence)
     {
-        Presence::destroy($id);
+        $presence->delete();
 
-        return redirect('presences')->with('flash_message', 'Presence deleted!');
+        //redirect to index
+        return redirect()->route('presences.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }

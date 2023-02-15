@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController; 
+use Illuminate\Http\Request;; 
 
-class HomeController extends BaseController
+class HomeController extends Controller
 {
     /**
      * Create a new controller instance.

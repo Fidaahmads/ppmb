@@ -2,38 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Presence extends Model
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'presences';
+    use HasFactory;
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
-    protected $primaryKey = 'id';
-
-    /**
-     * Attributes that should be mass-assignable.
+     * fillable
      *
      * @var array
      */
-    protected $fillable = ['schedule_id', 'student_id', 'note', 'start_at', 'end_at'];
-
-    public function schedule()
-    {
-        return $this->belongsTo('App\Models\Schedule');
-    }
-    public function student()
-    {
-        return $this->belongsTo('App\Models\Student');
-    }
-    
+    protected $fillable = [
+        'schedule_id',
+        'student_id',
+        'group_id',
+        'presence',
+        'note',
+    ];
 }

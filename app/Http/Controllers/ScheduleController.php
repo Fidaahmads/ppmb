@@ -2,130 +2,128 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
-
+use Illuminate\Http\Request;
 use App\Models\Schedule;
 use App\Models\Group;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Routing\Controller as BaseController; 
 
-class ScheduleController extends BaseController
+
+class ScheduleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * index
      *
-     * @return \Illuminate\View\View
+     * @return void
      */
-    public function index(Request $request)
+    public function index()
     {
-        $keyword = $request->get('search');
-        $perPage = 25;
+        //get posts
+        $schedules = Schedule::latest()->paginate(5);
 
-        if (!empty($keyword)) {
-            $schedules = Schedule::where('group_id', 'LIKE', "%$keyword%")
-                ->orWhere('user_id', 'LIKE', "%$keyword%")
-                ->orWhere('note', 'LIKE', "%$keyword%")
-                ->orWhere('time_start_at', 'LIKE', "%$keyword%")
-                ->orWhere('time_end_at', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $schedules = Schedule::latest()->paginate($perPage);
-        }
-
+        //render view with posts
         return view('schedules.index', compact('schedules'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * create
      *
-     * @return \Illuminate\View\View
+     * @return void
      */
     public function create()
     {
-        $schedule = DB::table('groups')
-            ->join('users', 'users.id', '=', 'groups.user_id')
-            ->select('groups.*', 'users.id as users_id', 'users.name as users_name')
-            ->get();
-        return view('schedules.create', compact('schedule'));
+        $schedules = Schedule::All();
+        $group = Group::All();
+        $user = User::All();
+        return view('schedules.create', compact('schedules', 'group', 'user'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function store(Request $request)
     {
-        
-        $requestData = $request->all();
-        
-        Schedule::create($requestData);
 
-        return redirect('schedules')->with('flash_message', 'Schedule added!');
+
+        //validate form
+        $request->validate([
+            'group_id'     => 'required',
+            'user_id'     => 'required',
+            'note'     => 'required',
+            'time_start_at'     => 'required',
+            'time_end_at'     => 'required',
+        ]);
+
+        //create post
+        Schedule::create([
+            'group_id'   => $request->group_id,
+            'user_id'   => $request->user_id,
+            'note'      => $request->note,
+            'time_start_at'  => $request->time_start_at,
+            'time_end_at'  => $request->time_end_at
+        ]);
+
+        //redirect to index
+        return redirect()->route('schedules.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $schedule = Schedule::findOrFail($id);
-
-        return view('schedules.show', compact('schedule'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
+     * edit
+     * 
+     * @param  mixed $schedule
+     * @return void
      */
     public function edit($id)
     {
-        $schedule = Schedule::findOrFail($id);
+        $schedules = Schedule::find($id);
+        $group = Group::All();
+        $user = User::All();
+        $selectedGroupId = DB::table('schedules')->select('group_id')->where('id', $id)->value('group_id');
+        $selectedUserId = DB::table('schedules')->select('user_id')->where('id', $id)->value('user_id');
 
-        return view('schedules.edit', compact('schedule'));
+        return view('schedules.edit', compact('schedules', 'group', 'user', 'selectedGroupId', 'selectedUserId'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function update(Request $request, $id)
-    {
-        
-        $requestData = $request->all();
-        
-        $schedule = Schedule::findOrFail($id);
-        $schedule->update($requestData);
 
-        return redirect('schedules')->with('flash_message', 'Schedule updated!');
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $schedules
+     * @return void
+     */
+    public function update(Request $request, Schedule $schedules)
+    {
+        //validate form
+        $request->validate([
+            'group_id'     => 'required',
+            'user_id'     => 'required',
+            'note'     => 'required',
+            'time_start_at'     => 'required',
+            'time_end_at'     => 'required',
+        ]);
+
+        //update Group
+        $schedules->update([
+            'group_id'   => $request->group_id,
+            'user_id'   => $request->user_id,
+            'note'      => $request->note,
+            'time_start_at'  => $request->time_start_at,
+            'time_end_at'  => $request->time_end_at
+        ]);
+
+
+        //redirect to index
+        return redirect()->route('schedules.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
+    public function destroy(Schedule $schedule)
     {
-        Schedule::destroy($id);
+        // Autentikasi Edit dan Delete Data
+        if (auth()->user()->id != $schedule->user_id) {
+            return redirect()->back()->withErrors(['Anda tidak memiliki hak akses untuk mengedit data ini. Silahkan Menghubungi Admin']);
+        }
+        // Delete Data
+        $schedule->delete();
 
-        return redirect('schedules')->with('flash_message', 'Schedule deleted!');
+        //redirect to index
+        return redirect()->route('schedules.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }

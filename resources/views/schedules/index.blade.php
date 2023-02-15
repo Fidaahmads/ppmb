@@ -1,62 +1,88 @@
-@extends('layout.admin')
-
+@extends('layouts.admin')
 @section('content')
-    <div class="container">
-        <div class="row">
+    <!-- Awal Data Table -->
+    <div id="table" class="container">
+        @if(session()->has('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+        @endif
 
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header">Schedules</div>
-                    <div class="card-body">
-                        <a href="{{ url('/schedules/create') }}" class="btn btn-success btn-sm" title="Add New Schedule">
-                            <i class="fa fa-plus" aria-hidden="true"></i> Add New
-                        </a>
+        @if(count($errors))
+        <div class="alert alert-danger">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </div>
+        @endif
 
-                        <form method="GET" action="{{ url('/schedules') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="search" placeholder="Search..." value="{{ request('search') }}">
-                                <span class="input-group-append">
-                                    <button class="btn btn-secondary" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
+
+        <h1>
+            >ACTIVE CLASS DATA
+        </h1>
+
+        <table class="table table-strip">
+            <a href="{{ route('schedules.create') }}" class="btn btn-md btn-success mb-3"><i class="fa fa-plus-circle
+"></i> ADD NEW ({{ Auth::user()->name }})</a>
+            <thead>
+                <tr class="table">
+                    <th scope="col">
+                        ID
+                    </th>
+                    <th scope="col">
+                        Group 
+                    </th>
+                    <th scope="col">
+                        User Id
+                    </th>
+                    <th scope="col">
+                        Note
+                    </th>
+                    <th scope="col">
+                        time_start_at
+                    </th>
+                    <th scope="col">
+                        time_end_at
+                    </th>
+                    <th scope="col" colspan="2">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse($schedules as $item)
+                <tr class="text-center">
+                    <td>{{ $item->id }}</td>
+                    <td>{{ $item->group_id }}</td>
+                    <td>{{ $item->user_id }}</td>
+                    <td>{{ $item->note }}</td>
+                    <td>{{ $item->time_start_at }}</td>
+                    <td>{{ $item->time_end_at }}</td>
+                    <td class="text-center">
+                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('schedules.destroy', $item->id) }}" method="POST">
+                            <a href="{{ route('schedules.edit', $item->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> EDIT</a>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> DELETE</button>
+                            <a href="{{ route('presences.show', $item->id) }}" class="btn btn-sm btn-success"><i class="fa fa-list-ul"></i> Attendance</a>
                         </form>
+                    </td>
+                </tr>
 
-                        <br/>
-                        <br/>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th><th>Group Id</th><th>Group Name</th><th>User Id</th><th>User Name</th><th>Note</th><th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($schedules as $item)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->group_id }}</td><td>{{ $item->group->name }}</td><td>{{ $item->user_id }}</td><td>{{ $item->user->name }}</td><td>{{ $item->note }}</td>
-                                        <td>
-                                            <a href="{{ url('/schedules/' . $item->id) }}" title="View Schedule"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            <a href="{{ url('/schedules/' . $item->id . '/edit') }}" title="Edit Schedule"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
-
-                                            <form method="POST" action="{{ url('/schedules' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                                                {{ method_field('DELETE') }}
-                                                {{ csrf_field() }}
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete Schedule" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                            <div class="pagination-wrapper"> {!! $schedules->appends(['search' => Request::get('search')])->render() !!} </div>
-                        </div>
-
-                    </div>
+                @empty
+                <div class="alert alert-danger">
+                    DATA NOT FOUND
                 </div>
-            </div>
+
+                @endforelse
+            </tbody>
+            <!-- Akhir Data Table -->
+        </table>
+        <div>
+
         </div>
     </div>
-@endsection
+
+
+@stop

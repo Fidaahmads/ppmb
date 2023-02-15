@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<h4>MemberController Data</h4>
+<h4>Data Murid</h4>
 
     <div class="container mt-5">
         <div class="row">

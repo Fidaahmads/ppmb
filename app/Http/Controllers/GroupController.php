@@ -6,9 +6,8 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Routing\Controller as BaseController; 
-
-class GroupController extends BaseController
+ 
+class GroupController extends Controller
 {
     /**
      * index
