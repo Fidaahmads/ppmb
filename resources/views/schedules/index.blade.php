@@ -18,7 +18,7 @@
 
 
         <h1>
-            >ACTIVE CLASS DATA
+            DATA KELAS
         </h1>
 
         <table class="table table-strip">

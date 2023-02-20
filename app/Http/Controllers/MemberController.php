@@ -13,16 +13,16 @@ class MemberController extends Controller
      * 
      * @return void
      */
-    // public function index(Request $request)
-    // {
-    //     $group_id = $request->query('group_id');
-    //     $members = DB::table('members')->where('group_id', $group_id)->get();
+    public function index(Request $request)
+    {
+        $group_id = $request->query('group_id');
+        $members = DB::table('members')->where('group_id', $group_id)->get();
 
 
-    //     // Render View with member
-    //     return view('members.index', compact('members'));
+    // Render View with member
+       return view('members.index', compact('members'));
 
-    // }
+    }
 
     /**
      * create
@@ -32,10 +32,10 @@ class MemberController extends Controller
     public function create()
     {
         $groups = DB::table('members')
-            ->join('', 'groups.id', '=', 'members.groups_id')
+            ->join('groups', 'groups.id', '=', 'members.group_id')
             ->select('members.*', 'groups.name as group_name')
             ->get();
-        return view('members.create');
+        return view('members.create', compact('groups'));
     }
 
     /**
@@ -59,6 +59,6 @@ class MemberController extends Controller
         ]);
 
         //redirect to index
-        return redirect()->route('groups.show')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('groups.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 }

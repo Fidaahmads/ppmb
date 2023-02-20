@@ -14,8 +14,8 @@
                                 <label class="font-weight-bold">ID Kelas</label>
                                 <select type="number" class="form-control @error('group_id') is-invalid @enderror" name="group_id" id="group_id">
                                     <option>Pilih Kelas</option>
-                                    @foreach($members as $data)
-                                        <option value="{{ $data->id }}">{{ $data->id }}. {{ $data->name }}</option>
+                                    @foreach($groups as $data)
+                                        <option value="{{ $data->id }}">{{ $data->id }}</option>
                                     @endforeach
                                 </select>
 
