@@ -1,58 +1,76 @@
 @extends('layouts.admin')
 @section('content')
-<h4>Group Data</h4>
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card border-0 shadow rounded">
-                    <div class="card-body">
-                        <a href="{{ route('groups.create') }}" class="btn btn-md btn-success mb-3">ADD GROUP</a>
-                        <table class="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Dosen ID</th>
-                                <th scope="col">Dosen</th>
-                                <th scope="col">Kelas</th>
-                                <th scope="col">Students</th>
-                                <th scope="col">Action</th> 
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @forelse ($groups as $group)
-                                <tr>
-                                    <td>{{ $group->id }}</td>
-                                    <td>{{ $group->user_id }}</td>
-                                    <td>{{ $group->user_name; }}</td>
-                                    <td>{{ $group->name }}</td>
-                                    <td><a href="{{ route('members.index') }}" class="btn btn-sm btn-success">LIST</a></td>
-                                    <td class="text-center">
-                                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('groups.destroy', $group->id) }}" method="POST">
-                                            <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                              @empty
-                                  <div class="alert alert-danger">
-                                      Data Post belum Tersedia.
-                                  </div>
-                              @endforelse
-                            </tbody>
-                          </table>  
-                    
-                    </div>
+<table class="table table-strip">
+            <a href="{{ route('groups.create') }}" class="btn btn-md btn-success mb-3">ADD NEW</a>
+             <thead class="thead table-dark">
+                <tr class="table table-dark">
+                <th scope="col">
+                      <center>View Student</center>  
+                    </th>
+                    <th scope="col">
+                      <center>ID</center>  
+                    </th>
+                    <th scope="col">
+                    <center>Dosen ID </center>  
+                    </th>
+                    <th scope="col">
+                    <center>Teacher Name</center>  
+                    </th>
+                    <th scope="col">
+                    <center>Class Name</center> 
+                    </th>
+                    <th scope="col" colspan="2">
+                    <center> Adjustment </center>  
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse($groups as $group)
+                 <tr>
+                <td><center><a href="{{ url('members') }}/{{ $group->id }}" class="btn btn-sm btn-success">LIST</a></td>
+                    <td class="text-center">{{ $group->id }}</td>
+                    <td class="text-center">{{ $group->user_id }}</td>
+                    <td class="text-center">{{ $group->user_name }}</td>
+                    <td class="text-center">{{ $group->name }}</td>
+                    <td class="text-center"> 
+                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('groups.destroy', $group->id) }}" method="POST">
+                            <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">DELETE</button>
+                        </form>
+                    </td>
+                </tr>
+
+                @empty
+                <div class="alert alert-danger">
+                    <center>DATA NOT FOUND</center>
                 </div>
-            </div>
+
+                @endforelse
+            </tbody>
+            <!-- Akhir Data Table -->
+        </table>
+        <div>
+
         </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-
-    @stop
+    <!-- Start Footer Code -->
+    <?php
+    // include("style/footer.php")
+    ?>
+  
+    <!-- <script>
+        //message with toastr
+        @if(session()->has('success'))
+        
+            toastr.success('{{ session('success') }}', 'BERHASIL!'); 
+        @elseif(session()->has('error'))
+            toastr.error('{{ session('error') }}', 'GAGAL!'); 
+            
+        @endif
+    </script> -->
+@stop

@@ -26,6 +26,6 @@ class Member extends Model
     
     public function group()
     {
-        return $this->belongsTo(group::class);
+        return $this->belongsTo(Group::class);
     }
 }

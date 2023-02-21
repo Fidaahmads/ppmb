@@ -35,11 +35,11 @@ class PresenceController extends Controller
             ->select('schedules.*', 'groups.name as group_name', 'users.name as user_name')
             ->where('schedules.id', $id)
             ->first();
-        
-        $group_id = $result->group_id;    
+
+        $group_id = $result->group_id;
         $count = DB::table('members')->where('group_id', $group_id)->count();
 
-        $presence = DB::table('members') ->select('members.*') ->where('group_id', $group_id) ->get();
+        $presence = DB::table('members')->select('members.*')->where('group_id', $group_id)->get();
 
         return view('presences.action', compact('schedule', 'result', 'count', 'presence'));
     }
@@ -63,19 +63,21 @@ class PresenceController extends Controller
 
         //validate form
         $request->validate([
-            'schedule_id'     => 'required',
-            'student_id'     => 'required',
-            'presence'     => 'required',
-            'note'     => 'required'
+            'schedule' => 'required',
+            'status' => 'required',
+ 
         ]);
 
         //create post
-        Presence::create([
-            'schedule_id'   => $request->schedule_id,
-            'student_id'   => $request->student_id,
-            'presence'      => $request->presence,
-            'note'  => $request->note,
-        ]);
+        foreach ($request->status as $name => $status) {
+            Presence::create([
+                'schedule_id' => $request->schedule,
+                'student_id' => $name,
+                'presence' => $status,
+                'note' => $request->note[$name],
+            ]);
+        }
+ 
 
         //redirect to index
         return redirect()->route('presences.index')->with(['success' => 'Data Berhasil Disimpan!']);
@@ -109,18 +111,18 @@ class PresenceController extends Controller
     {
         //validate form
         $request->validate([
-            'schedule_id'     => 'required',
-            'student_id'     => 'required',
-            'presence'     => 'required',
-            'note'     => 'required',
+            'schedule_id' => 'required',
+            'student_id' => 'required',
+            'presence' => 'required',
+            'note' => 'required',
         ]);
 
         //update Group
         $presence->update([
-            'schedule_id'   => $request->schedule_id,
-            'student_id'   => $request->student_id,
-            'presence'      => $request->presence,
-            'note'  => $request->note
+            'schedule_id' => $request->schedule_id,
+            'student_id' => $request->student_id,
+            'presence' => $request->presence,
+            'note' => $request->note
         ]);
 
 

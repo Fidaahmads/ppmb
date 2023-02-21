@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\group;
+use App\Models\Group;
 use App\Models\Member;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -34,7 +34,7 @@ class MemberController extends Controller
     public function create()
     {
         $student = Student::all();
-        $groups = group::all();
+        $groups = Group::all();
             // dd($groups);
         return view('members.create', [
             'gr' => $groups,
@@ -68,16 +68,20 @@ class MemberController extends Controller
         return redirect()->route('groups.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
-    public function show($id)
+    public function show( $id)
     {
-        $group = Member::all();
+        $group = Member::where('group_id',$id)->get();
+        // dd($group);
         // $groups = DB::table('members')
         //     ->select('members.*','groups.name as group_name','students.name')
         //     ->join('groups', 'groups.id', '=', 'members.group_id')
         //     ->join('members.student_id','=','students.id')
         //     ->where('groups.id','=',$id)
         //     ->get();
-        // dd($group);
+        // foreach ($group as $key => $value) {
+        //     dd($value->student->name);
+        // }
+        
         return view('members.index', compact('group'));
     }
 }

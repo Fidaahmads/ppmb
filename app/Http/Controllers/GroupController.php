@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
-use App\Models\User;
+use App\Models\Member;
+use App\Models\user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
- 
+use Illuminate\Support\Facades\Storage;
+
+
 class GroupController extends Controller
 {
     /**
@@ -22,15 +25,13 @@ class GroupController extends Controller
         // $groups = Group::with('users')->get();
 
 
-        $groups = DB::table('groups')
-            ->join('users', 'users.id', '=', 'groups.user_id')
-            ->select('groups.*', 'users.name as user_name')
-            ->get();
-
+        $groups = Group::all();
+      
         //render view with groups
         return view('groups.index', compact('groups'));
     }
 
+    
     /**
      * create
      *
@@ -66,18 +67,20 @@ class GroupController extends Controller
         return redirect()->route('groups.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
+
     /**
      * edit
-     * 
+     *
      * @param  mixed $group
      * @return void
      */
     public function edit(Group $group)
     {
-        // Autentikasi Edit dan Delete Data
-        if (auth()->user()->id != $group->user_id) {
-            return redirect()->back()->withErrors(['Anda tidak memiliki hak akses untuk mengedit data ini. Silahkan Menghubungi Admin']);
-        }
+        // $selectedUserId = $group->id;
+        // return view('groups.edit', ['group' => $group, 'selectedUserId' => $selectedUserId]);
+        // return view('groups.edit', compact('group'));
+
+        // $group = User::all();
         return view('groups.edit', compact('group'));
     }
 
@@ -91,15 +94,15 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         //validate form
-        $request->validate([
-            'name'      => 'required|min:5',
+        $request->validate([  
+            'name'     => 'required',
         ]);
 
-        //update Group
+        //update group
         $group->update([
+
             'name'      => $request->name
         ]);
-
 
         //redirect to index
         return redirect()->route('groups.index')->with(['success' => 'Data Berhasil Diubah!']);
@@ -107,10 +110,6 @@ class GroupController extends Controller
 
     public function destroy(Group $group)
     {
-        // Autentikasi Edit dan Delete Data
-        if (auth()->user()->id != $group->user_id) {
-            return redirect()->back()->withErrors(['Anda tidak memiliki hak akses untuk mengedit data ini. Silahkan Menghubungi Admin']);
-        }
         // Delete Data
         $group->delete();
 
