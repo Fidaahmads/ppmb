@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<h4>Data Murid</h4>
+<h4>Student Data</h4>
 
     <div class="container mt-5">
         <div class="row">
@@ -12,19 +12,16 @@
                             <thead>
                               <tr>
                                 <th scope="col">ID</th>
-                                <th scope="col">Group ID</th>
-                                <th scope="col">Student ID</th>
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Action</th>
                               </tr>
                             </thead>
                             <tbody>
-                              @forelse ($members as $member)
+                              @forelse ($group as $member)
                                 <tr>
-                                    <td>{{ $member->id }}</td>
-                                    <td>{{ $member->group_id; }}</td>
-                                    <td>{{ $member->student_id }}</td>
-                                    <td>{{ $member->student_name }}</td>
+
+                                    <td>{{ $member->student->id }}</td>
+                                    <td>{{ $member->student->name }}</td>
                                     <td class="text-center">
                                         <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('members.destroy', $member->id) }}" method="POST">
                                             <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-primary">EDIT</a>

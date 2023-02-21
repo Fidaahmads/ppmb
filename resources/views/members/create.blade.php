@@ -11,12 +11,14 @@
 
                             @csrf
                             <div class="form-group">
-                                <label class="font-weight-bold">ID Kelas</label>
-                                <select type="number" class="form-control @error('group_id') is-invalid @enderror" name="group_id" id="group_id">
-                                    <option>Pilih Kelas</option>
-                                    @foreach($groups as $data)
-                                        <option value="{{ $data->id }}">{{ $data->id }}</option>
-                                    @endforeach
+                            <label class="font-weight-bold">Student Name </label>
+                                <!-- <input type="number" class="form-control @error('user_id') is-invalid @enderror" name="user_id" value="{{ old('user_id') }}" placeholder="#"> -->
+
+                                <select type="text" class="form-control  @error('student_id') is-invalid @enderror" name="student_id" id="student_id">
+                                    <option>Choose Student</option>
+                                        @foreach ($student as $students)
+                                            <option value="{{ $students->id }}">{{ $students->id }}. {{ $students->name }}</option>
+                                        @endforeach
                                 </select>
 
                                 <!-- error message untuk group_id -->
@@ -26,17 +28,16 @@
                                 </div>
                                 @enderror
                             </div>
+                            
 
                             <div class="form-group">
-                                <label class="font-weight-bold">Nama Kelas</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Kelas Programmer">
-
-                                <!-- error message untuk name -->
-                                @error('name')
-                                <div class="alert alert-danger mt-2">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                <label class="font-weight-bold">Group Name</label>
+                                <select type="text" class="form-control"   name="group" id="group">
+                                    <option>Choose Class</option>
+                                        @foreach ($gr as $students)
+                                            <option value="{{ $students->id }}">{{ $students->id }}. {{ $students->name }}</option>
+                                        @endforeach
+                                </select>
                             </div>
                             <br>
                             <button type="submit" class="btn btn-md btn-primary">SUBMIT</button>
