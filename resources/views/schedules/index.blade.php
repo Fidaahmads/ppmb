@@ -24,8 +24,8 @@
         <table class="table table-strip">
             <a href="{{ route('schedules.create') }}" class="btn btn-md btn-success mb-3"><i class="fa fa-plus-circle
 "></i> ADD NEW ({{ Auth::user()->name }})</a>
-            <thead>
-                <tr class="table">
+            <thead class="table-info">
+                <tr class="table table-info">
                     <th scope="col">
                         ID
                     </th>

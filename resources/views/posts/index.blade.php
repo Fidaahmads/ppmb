@@ -8,8 +8,8 @@
                     <div class="card-body">
                         <a href="{{ route('posts.create') }}" class="btn btn-md btn-success mb-3">TAMBAH POST</a>
                         <table class="table table-bordered">
-                            <thead>
-                              <tr>
+                            <thead class="table-info">
+                              <tr class="table-info">
                                 <th scope="col">GAMBAR</th>
                                 <th scope="col">JUDUL</th>
                                 <th scope="col">CONTENT</th>

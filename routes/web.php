@@ -15,7 +15,10 @@ Route::middleware(['auth', 'user-access'])->group(function () {
     Route::resource('members', App\Http\Controllers\MemberController::class);
     Route::resource('schedules', App\Http\Controllers\ScheduleController::class);
     Route::resource('presences', App\Http\Controllers\PresenceController::class);
+    Route::resource('quizz/quizzes', App\Http\Controllers\quizz\QuizzesController::class);
+
 });
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+

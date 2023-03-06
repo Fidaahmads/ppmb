@@ -9,8 +9,8 @@
                     <div class="card-body">
                         <a href="{{ route('members.create') }}" class="btn btn-md btn-success mb-3">ADD MEMBER</a>
                         <table class="table table-bordered">
-                            <thead>
-                              <tr>
+                            <thead class="table-info">
+                              <tr class="table-info">
                                 <th scope="col">ID</th>
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Action</th>
